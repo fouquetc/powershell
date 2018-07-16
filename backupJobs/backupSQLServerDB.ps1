@@ -1,9 +1,10 @@
 # Date : 01/09/2014
 # Auteur : C. FOUQUET
 # Description  : 
-# Sauvegarde online complète des bases de données du serveur PREF37-SAPP1
+# Sauvegarde online complète des bases de données du serveur SAPP1
 # $RemBkpSrvRootFolder: chemin du dossier racine sur serveur de sauvegarde distant
 # $MsgRetour
+# les noms de serveurs et adresses mail ont été anonymisés et doivent être modifiés dans le script
 
 # Chargement des assemblys (fonctions) SMO nécessaires (SMO - Server Management Object : composants Powershell optionnels pour la gestion des serveurs)
  [System.Reflection.Assembly]::LoadWithPartialName("Microsoft.SqlServer.SMO") | Out-Null            
@@ -11,8 +12,8 @@
  [System.Reflection.Assembly]::LoadWithPartialName("Microsoft.SqlServer.ConnectionInfo") | Out-Null             
  [System.Reflection.Assembly]::LoadWithPartialName("Microsoft.SqlServer.SmoEnum") | Out-Null             
 
-# Définition du chemin de base sur pref37-sbackup2
-$RemBkpSrvRootFolder = "\\pref37-sbackup2\backup\"
+# Définition du chemin de base sur sbackup
+$RemBkpSrvRootFolder = "\\sbackup\backup\"
 
 # Définition du format d'encodage du corps du message envoyé en fin de travail
 $encoding=[System.Text.Encoding]::UTF8
@@ -80,7 +81,7 @@ $Script:MsgRetour += "Fichier copié vers $RemBkpSrvRootFolder$RemoteBackupFolde
 trap [Exception]
  {            
   $Script:MsgRetour += "Base $DbName : " + "`n`r" + $_.Exception.Message
-  send-mailmessage -from "sidsic-spvr <sidsic-spvr@indre-et-loire.gouv.fr>" -to "sidsic-spvr <sidsic-spvr@indre-et-loire.gouv.fr>" -subject "[Pref37-sapp1] ERREUR - Sauvegarde du $(Get-Date -format "dd/MM/yyyy HH:mm:ss")" -body $Script:MsgRetour -smtpServer pref.mel37.si.mi -Encoding $encoding
+  send-mailmessage -from "srv@gmail.com>" -to "spvr@gmail.com>" -subject "[SRVXXX] ERREUR - Sauvegarde du $(Get-Date -format "dd/MM/yyyy HH:mm:ss")" -body $Script:MsgRetour -smtpServer mail.gmail.com -Encoding $encoding
   break            
  }          
     
@@ -108,7 +109,7 @@ trap [Exception]
 # Backup-Database ($env:COMPUTERNAME + "\PREF37R3WEB") "toto" "r3web\BasesSystemes"
     
   # Envoi du message de rapport vers la BAL sidsic-spvr
-  send-mailmessage -from "sidsic-spvr <sidsic-spvr@indre-et-loire.gouv.fr>" -to "sidsic-spvr <sidsic-spvr@indre-et-loire.gouv.fr>" -subject "[Pref37-sapp1] Sauvegarde du $(Get-Date -format "dd/MM/yyyy HH:mm:ss")" -body $Script:MsgRetour -smtpServer pref.mel37.si.mi -Encoding $encoding
+  send-mailmessage -from "spvr@gmail.com>" -to "spvr@gmail.com>" -subject "[SRVXXX] Sauvegarde du $(Get-Date -format "dd/MM/yyyy HH:mm:ss")" -body $Script:MsgRetour -smtpServer mail@gmail.com -Encoding $encoding
   
   # Ecriture d'un événement contenant l'objet du message dans le journal Application
   # Remarque : nécessite d'avoir exécuté (1 seule fois) la commande suivante pour créer la source d'événement
